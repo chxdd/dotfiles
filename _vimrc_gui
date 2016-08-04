@@ -1,0 +1,165 @@
+" VUNDLE
+set nocompatible              " be iMproved, required
+filetype off                  " required
+
+" set the runtime path to include Vundle and initialize
+set rtp+=$HOME/vimfiles/bundle/Vundle.vim/
+" alternatively, pass a path where Vundle should install plugins
+call vundle#begin('$HOME/vimfiles/bundle')
+
+" let Vundle manage Vundle, required
+Plugin 'VundleVim/Vundle.vim'
+Plugin 'mattn/emmet-vim'
+Plugin 'pangloss/vim-javascript'
+Plugin 'kien/ctrlp.vim'
+Plugin 'wookiehangover/jshint.vim'
+
+Bundle 'scrooloose/nerdtree'
+Bundle 'tpope/vim-rails'
+Bundle 'vim-node'
+
+" All of your Plugins must be added before the following line
+call vundle#end()            " required
+filetype plugin indent on    " required
+
+" COLORS
+colorscheme herald 			" set colorscheme
+syntax enable
+
+
+" UI CONFIG
+if has("gui_running")
+	set guioptions-=T
+    set guioptions+=e
+    set guitablabel=%M\ %t
+    set guifont=Courier_New:h11:cDEFAULT
+endif
+
+set nocompatible
+set number					" show line numbers
+set cursorline				" highlight current line
+set showcmd
+
+set visualbell
+
+set wildmenu
+
+filetype on
+filetype indent on
+filetype plugin on
+
+set showmatch				"highlight matching parenths
+
+
+"STATUSLINE
+"COLORS
+if v:version >= 700
+    au InsertEnter * hi statusline guibg=#ffffff
+    au InsertLeave * hi statusline guibg=#222222
+endif
+
+hi User1 guifg=#eea040 guibg=#222222
+hi User2 guifg=#dd3333 guibg=#222222
+hi User3 guifg=#bbbbbb guibg=#222222
+hi User4 guifg=#aaaaaa guibg=#222222
+hi User5 guifg=#ffffff guibg=#222222
+
+
+" ALWAYS SHOWING
+set laststatus=2
+
+set statusline=
+set statusline +=%5*\[%n]    " buffer number
+set statusline +=%1*\ %<%F\  " File+path
+set statusline +=%2*%m%*    " modified flag
+set statusline +=%2*\ %y\    " FileType
+set statusline +=%3*%=[
+set statusline +=%4*%=line:
+set statusline +=%1*%=%l%*             "current line
+set statusline +=%2*%=/
+set statusline +=%2*%=%L%*               "total lines
+set statusline +=%3*%=]
+
+" SPACES AND TABS
+set autoindent
+set tabstop=4
+set softtabstop=4
+set expandtab
+
+
+" SEARCHING
+set incsearch
+set hlsearch
+
+" FOLDING
+set foldenable
+set foldlevelstart=10
+set foldnestmax=10
+nnoremap <space> za
+"SPACE OPENS and CLOSES folds
+
+" LEADER SHORTCUTS
+let mapleader=";"
+
+" EMMET REMAPPING
+let g:user_emmet_leader_key=","
+let g:user_emmet_expandabbr_key='<Space><CR>'
+
+" REMAP ESCAPE
+imap jk <Esc>
+vmap jk <Esc>
+
+" REMAP SAVE
+imap <leader>ss <Esc>:w!<CR>
+
+" TURN OFF SEARCH HIGHLIGHT
+nmap <leader><space> :nohlsearch<CR>
+nmap <silent> <BS> :nohlsearch<CR> 
+
+" NERDTree nmap <leader>n :NERDTreeToggle<CR> let NERDTreeHighlightCursorline=1
+let NERDTreeIgnore=['tmp','yardoc','pkg']
+
+" PERSONAL ZEN-CODING
+imap <leader>h <html><CR><head><CR><TAB><title><CR><TAB><TAB>Default Title<CR><Esc>0i<TAB></title><CR><Esc>0i</head><CR><CR><Esc>0i<body><CR><Esc>0i</body><CR><Esc>0i</html><Esc>02ko<TAB>
+imap <leader>s <style type="text/css"><CR></script><Esc>O
+imap <leader>js <script type="text/javascript"><CR></script><Esc>O<TAB>
+imap <leader>jf function a() {<CR>}<Esc>O<TAB>var = 
+imap <leader>tag getElementByTagName
+imap <leader>id getElementById
+imap <leader>i .innerHTML
+
+" PERSONAL ABBREVIATIONS
+iabbrev )) ()
+iabbrev chadd@ chadd@7thMetric.com
+iabbrev ture true
+iabbrev flase false
+iabbrev adn and
+iabbrev teh the
+iabbrev copyright © 2016 All rights reserved.
+
+nnoremap / /\v
+
+
+" CUSTOM FUNCTIONS
+" toggle between number and relativenumber
+function! ToggleNumber()
+    if(&relativenumber == 1)
+        set norelativenumber
+        set number
+    else
+        set relativenumber
+    endif
+endfunc
+
+" strips trailing whitespace at the end of files. this
+" is called on buffer write in the autogroup above.
+function! <SID>StripTrailingWhitespaces()
+    " save last search & cursor position
+    let _s=@/
+    let l = line(".")
+    let c = col(".")
+    %s/\s\+$//e
+    let @/=_s
+    call cursor(l, c)
+endfunction
+

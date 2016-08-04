@@ -1,0 +1,94 @@
+#!/bin/bash
+
+# Seventh Metric Inc.
+# Chadd Rivera
+
+# If not running interactively, don't do anything
+[[ "$-" != *i* ]] && return
+
+
+export EDITOR=/usr/bin/vim
+export PATH=$PATH:/cygdrive/c/MongoDB/bin:/cygdrive/c/xampp:~/bin
+export TERM=xterm-256color
+export GREP_OPTIONS='--color=auto' GREP_COLOR='1;32'
+
+
+#PS1="\[\033[35m\]\t\[\033[m\]-\[\033[36m\]\u\[\033[m\]@\[\033[32m\]\h:\[\033[33;1m\]\w\[\033[m\]\$ "
+# PS1="\[\033[31;41;1m\]\333\262\261\260\[\033[37;41;1m\]\u@\h\[\033[0m\033[31;40m\]\333\262\261\260\[\033[37;40;1m\] \d \$(date +%I:%M:%S%P)\n\[\033[31;40;1m\]\w/\[\033[0m\] "
+# PS2="\[\033[31;40m\]\333\262\261\260\[\033[0m\]>"
+PS1="\n\[\033[38;5;172m\]\[\033[48;5;236m\]\u\[\033[38;5;15m\]@\[\033[38;5;124m\]\h\[\033[38;5;15m\]\[\033[48;5;-1m\] - \d - \@\n\[\033[38;5;160m\]\[\033[48;5;236m\]\w/\[\033[38;5;15m\]\[\033[48;5;-1m\]\[$txtcyn\]\$git_branch\[$txtred\]\$git_dirty\[$txtrst\]\$ "
+
+# PS1="\u@\h \W \[$txtcyn\]\$git_branch\[$txtred\]\$git_dirty\[$txtrst\]\$ "
+
+
+# alias tmux="tmux -2"
+alias tmux='TERM=screen-256color tmux -2'
+alias tmuxinator='TERM=screen-256color tmuxinator'
+alias mux='TERM=screen-256color mux'
+alias apt-get="/cygdrive/c/CLI/setup-x86.exe -q -P"
+alias lynx='lynx -editor=vim -vikeys Http://www.google.com'
+alias vi='vim'
+# alias ="electrum --gui=text"
+alias wallet="electrum --gui=text"
+
+# Ignore Windows Default files and display colors
+LS_COMMON="-hG"
+# --color : On Windows7 this produces permission errors, e.g. for Music folder:
+# LS_COMMON="$LS_COMMON --color=auto"
+LS_COMMON="$LS_COMMON -I NTUSER.DAT\* -I ntuser.dat\*"
+LS_COMMON="$LS_COMMON -I AppData\*"
+LS_COMMON="$LS_COMMON -I Start\ Menu\*"
+LS_COMMON="$LS_COMMON -I Application\ Data\*"
+LS_COMMON="$LS_COMMON -I Local\ Settings\*"
+LS_COMMON="$LS_COMMON -I Cookies\*"
+LS_COMMON="$LS_COMMON -I ntuser.ini"
+LS_COMMON="$LS_COMMON -I ntuser.pol"
+LS_COMMON="$LS_COMMON -I Thumbs.db"
+LS_COMMON="$LS_COMMON -I Favorites\*"
+LS_COMMON="$LS_COMMON -I Recent\*"
+LS_COMMON="$LS_COMMON -I Searches\*"
+
+alias ls="command ls $LS_COMMON --color=auto"
+alias ll="ls -l"
+alias la="ls -al"
+alias note="geeknote"
+
+# alias clear="/cygdrive/c/Windows/System32/cmd.exe /c cls"
+
+# Weather by us zip code - Can be called two ways # weather 50315 # weather "Des Moines"
+weather ()
+{
+        declare -a WEATHERARRAY
+        WEATHERARRAY=( `lynx -dump "http://www.google.com/search?hl=en&lr=&client=firefox-a&rls=org.mozilla%3Aen-US%3Aofficial&q=weather+${1}&btnG=Search" | grep -A 5 -m 1 "Weather for"`)
+        echo ${WEATHERARRAY[@]}
+}
+
+
+
+#Translate a Word  - USAGE: translate house spanish  # See dictionary.com for available languages (there are many).
+translate ()
+{
+TRANSLATED=`lynx -dump "http://dictionary.reference.com/browse/${1}" | grep -i -m 1 -w "${2}:" | sed 's/^[ \t]*//;s/[ \t]*$//'`
+
+if [[ ${#TRANSLATED} != 0 ]] ;then
+   echo "\"${1}\" in ${TRANSLATED}"
+   else
+   echo "Sorry, I can not translate \"${1}\" to ${2}"
+fi
+}
+
+
+# Define a word - USAGE: define dog
+define ()
+{
+lynx -dump "https://www.google.com/search?hl=en&q=define%3A+${1}" | grep -m 3 -w "*"  | sed 's/;/ -/g' | cut -d- -f1 > /tmp/templookup.txt
+    if [[ -s  /tmp/templookup.txt ]] ;then    
+        until ! read response
+        do
+        echo "${response}"
+        done < /tmp/templookup.txt
+   else
+        echo "Sorry $USER, I can't find the term \"${1} \""                
+ fi    
+ rm -f /tmp/templookup.txt
+ }
